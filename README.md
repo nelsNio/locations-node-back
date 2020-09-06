@@ -21,3 +21,7 @@ Se ubica en la carpeta del proyecto
 
 2) ``node server/server.js`` para inicializar el servidor
    
+
+## Autor 
+
+NELSON ANDRES NIÑO VERDUGO
