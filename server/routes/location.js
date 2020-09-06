@@ -48,6 +48,7 @@ app.post('/locations', (req, res) => {
             return res.status(400).json({
                 ok: false,
                 mensaje: 'Ubicación ya existe.'
+<<<<<<< Updated upstream
             });
         } else {
             location.save().then(
@@ -64,6 +65,23 @@ app.post('/locations', (req, res) => {
                     });
                 });
         }
+=======
+            });
+        }
+        location.save().then(
+            function(data) {
+                return res.status(200).json({
+                    ok: true,
+                    mensaje: data
+                });
+            }).catch(
+            function(err) {
+                return res.status(400).json({
+                    ok: false,
+                    mensaje: err
+                });
+            });
+>>>>>>> Stashed changes
     })
 
 
