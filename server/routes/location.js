@@ -13,30 +13,67 @@ const location = require('../models/location');
 app.post('/locations', (req, res) => {
 
     let body = req.body;
+    if (body.LocationId != null) {
+        Location.findOne({
+            where: {
+                id: body.LocationId
+            }
+        }).then(locations => {
+            if (locations == null) {
+                return res.status(404).json({
+                    ok: false,
+                    mensaje: 'Ubicación no encontrada.'
+                });
+            }
+        })
+
+    }
 
     let location = new Location({
-        name: body.name,
-        areaM2: body.areaM2
+        name: body.name.toUpperCase(),
+        areaM2: body.areaM2,
+        LocationId: body.LocationId
     });
-
-    location.save().then(
-        function(data) {
-            return res.status(200).json({
-                ok: true,
-                mensaje: data
-            });
-        }).catch(
-        function(err) {
+    let locationID = body.LocationId;
+    if (locationID == undefined) {
+        locationID = null
+    }
+    Location.findOne({
+        where: {
+            LocationId: locationID,
+            name: location.name
+        }
+    }).then(locations => {
+        if (locations != null) {
             return res.status(400).json({
                 ok: false,
-                mensaje: err
+                mensaje: 'Ubicación ya existe.'
             });
-        });
+        } else {
+            location.save().then(
+                function(data) {
+                    return res.status(200).json({
+                        ok: true,
+                        mensaje: data
+                    });
+                }).catch(
+                function(err) {
+                    return res.status(400).json({
+                        ok: false,
+                        mensaje: err
+                    });
+                });
+        }
+    })
+
+
 
 });
 
 app.get('/locations', (req, res) => {
-    Location.findAll({ attributes: ['name', 'areaM2'] }).
+    Location.findAll({
+        attributes: ['id', 'name', 'areaM2', 'LocationId']
+    }).
     then(locations => {
             return res.status(200).json({
                 ok: true,
@@ -45,6 +82,7 @@ app.get('/locations', (req, res) => {
 
         })
         .catch(err => {
+            console.log(err);
             return res.status(400).json({
                 ok: false,
                 mensaje: err

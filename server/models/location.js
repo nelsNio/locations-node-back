@@ -1,6 +1,8 @@
 const { Sequelize, DataTypes } = require('sequelize');
 const sequelize = require('../database/database');
-const locationModel = {
+
+
+const locationModel = sequelize.define('Location', {
     // Model attributes are defined here
     name: {
         type: DataTypes.STRING,
@@ -10,13 +12,9 @@ const locationModel = {
         type: DataTypes.NUMBER,
         allowNull: false
     }
-    /*,
-        location: {
-            type: DataTypes.INTEGER,
-            allowNull: true
-        }*/
-};
+});
+
+locationModel.belongsTo(locationModel);
 
 
-
-module.exports = sequelize.define('Location', locationModel);
+module.exports = locationModel;
